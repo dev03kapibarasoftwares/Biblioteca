@@ -12,6 +12,10 @@ namespace Teste.Livros.Dto
         [MaxLength(100)]
         public string Nome { get; set; }
 
+        [Required]
+        [MaxLength(100)]
+        public string Autor { get; set; }
+
         [DefaultValue(false)]
         public bool Emprestado { get; set; }
     }

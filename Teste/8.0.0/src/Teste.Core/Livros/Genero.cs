@@ -11,7 +11,6 @@ namespace Teste.Livros
         [Required]
         [MaxLength(30)]
         public string Nome { get; set; }
-        [Required]
         [MaxLength(30)]
         public string SubGenero { get; set; }
     }

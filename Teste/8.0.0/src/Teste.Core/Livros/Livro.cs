@@ -11,6 +11,11 @@ namespace Teste.Livros
         [Required]
         [MaxLength(100)]
         public string Nome { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string Autor { get; set; }
+
         [Required]
         public bool Emprestado { get; set; }
     }
