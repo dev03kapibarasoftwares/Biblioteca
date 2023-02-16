@@ -1,6 +1,7 @@
 ﻿using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.UI;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,14 @@ namespace Teste.Livros
             if (inputGenero.Nome.IsNullOrEmpty())
                 throw new UserFriendlyException("Genero não informado!");
 
+            var livroExists = await _livroRepository.GetAll().AnyAsync(x => x.Nome == inputLivro.Nome
+                                                                            && x.Autor == inputLivro.Autor
+                                                                            && x.CodInterno == inputLivro.CodInterno);
+            if (livroExists)
+                throw new UserFriendlyException("Livro já cadastrado no banco de dados!");
 
+
+            
         }
     }
 }

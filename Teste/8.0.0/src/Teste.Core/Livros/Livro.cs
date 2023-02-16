@@ -18,5 +18,9 @@ namespace Teste.Livros
 
         [Required]
         public bool Emprestado { get; set; }
+
+        [Required]
+        public long? CodInterno{ get; set; }
+
     }
 }
