@@ -1,15 +1,15 @@
-﻿using Abp.Domain.Repositories;
+﻿using Abp.Authorization;
+using Abp.Domain.Repositories;
 using Abp.Extensions;
 using Abp.UI;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using Teste.Livros.Dto;
 
 namespace Teste.Livros
 {
+    [AbpAuthorize]
     public class LivrosAppService : TesteAppServiceBase, ILivrosAppService
     {
         private readonly IRepository<Livro, long> _livroRepository;
@@ -21,25 +21,78 @@ namespace Teste.Livros
             _generoRepository = generoRepository;
         }
 
-        private async Task TrataCadastroDeLivro (Livro inputLivro, Genero inputGenero, LivroHasGenero livroHasGenero)
+        private async Task TrataCadastroDeLivro (LivroDto inputLivro)
         {
-            if (livroHasGenero == null)
-                throw new UserFriendlyException("Genero do Livro não encontrado!");
-            if (inputLivro.Nome.IsNullOrEmpty())
+            if (inputLivro.Nome_Livro.IsNullOrEmpty())
                 throw new UserFriendlyException("Nome do Livro não informado!");
             if (inputLivro.Autor.IsNullOrEmpty())
                 throw new UserFriendlyException("Nome do Autor não informado!");
-            if (inputGenero.Nome.IsNullOrEmpty())
-                throw new UserFriendlyException("Genero não informado!");
+            if (inputLivro.Nome_Genero.IsNullOrEmpty())
+                throw new UserFriendlyException("Genero não informado!");         
+        }
 
-            var livroExists = await _livroRepository.GetAll().AnyAsync(x => x.Nome == inputLivro.Nome
-                                                                            && x.Autor == inputLivro.Autor
-                                                                            && x.CodInterno == inputLivro.CodInterno);
-            if (livroExists)
-                throw new UserFriendlyException("Livro já cadastrado no banco de dados!");
+        public async Task CreateAsync(LivroDto input)
+        {
+            var livro = ObjectMapper.Map<Livro>(input);
+            var genero = await _generoRepository.InsertAndGetIdAsync(ObjectMapper.Map<Genero>(input));
+            livro.Disponivel = false;
 
+            await _livroRepository.InsertAsync(livro);
+            await CurrentUnitOfWork.SaveChangesAsync();   
+        }
 
+        public async Task<List<Livro>> GetAll()
+        {
+            var livros = await _livroRepository.GetAllListAsync();
+            return livros;
+        }
+
+        public async Task<List<Livro>> GetAllLivrosDisponiveis()
+        {
+            var livrosDisponiveis = await _livroRepository.GetAllListAsync(x => x.Disponivel == true);
+            return livrosDisponiveis;
+        }
+
+        public async Task<List<Livro>> GetAllLivrosIndisponiveis()
+        {
+            var livrosIndisponiveis = await _livroRepository.GetAllListAsync(x => x.Disponivel == false);
+            return livrosIndisponiveis;
+        }
+
+        public async Task<List<Genero>> GetAllGeneros()
+        {
+            var generos = await _generoRepository.GetAllListAsync();
+            return generos;
+        }
+
+        public async Task UpdateLivro(LivroDto input)
+        {
+            var livroExists = await _livroRepository.GetAll()
+                                              .AnyAsync(x => x.Id == input.Id);
+            if (!livroExists)
+                throw new UserFriendlyException("Livro não cadastrado no banco de dados!");
+
+            var livro = await _livroRepository.FirstOrDefaultAsync(x => x.Id == input.Id);
+            livro.Nome_Livro = input.Nome_Livro;
+            livro.Autor = input.Autor;
+            livro.Disponivel = input.Disponivel;
+
+            var genero = await _generoRepository.FirstOrDefaultAsync(x => x.Id == livro.Id);
+            genero.Nome_Genero = input.Nome_Genero;
+            genero.SubGenero = input.SubGenero;
             
+            await _livroRepository.UpdateAsync(livro);
+            await _generoRepository.UpdateAsync(genero);
+        }
+
+        public async Task DeleteLivro(LivroDto input)
+        {
+            var livroExists = await _livroRepository.GetAll()
+                                              .AnyAsync(x => x.Id == input.Id);
+            if (!livroExists)
+                throw new UserFriendlyException("Livro não cadastrado no banco de dados!");
+
+            var livro = await _livroRepository.FirstOrDefaultAsync(x => x.Id == input.Id);
         }
     }
 }

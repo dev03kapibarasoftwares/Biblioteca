@@ -18,7 +18,7 @@ namespace Teste.EntityFrameworkCore
         public DbSet<Genero> Generos { get; set; }
         public DbSet<LivroHasGenero> LivrosHasGeneros { get; set; }
         public DbSet<PedidoDeRetirada> PedidosDeRetiradas { get; set; }
-        public DbSet<PedidoHasLivro> PedidoHasLivros { get; set; }
+        public DbSet<PedidoDeRetiradaItens> PedidoHasLivros { get; set; }
         
         public TesteDbContext(DbContextOptions<TesteDbContext> options)
             : base(options)

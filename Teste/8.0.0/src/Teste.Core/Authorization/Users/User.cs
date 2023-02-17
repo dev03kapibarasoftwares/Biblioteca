@@ -34,12 +34,12 @@ namespace Teste.Authorization.Users
 
         public static User CriaLeitor(int tenantId, string Nome, string email, string cpf)
         {
-            string[] _email = email.Split('@');
+
             string[] _nome = Nome.Split(' ');
             var user = new User
             {
                 TenantId = tenantId,
-                UserName = _email[0],
+                UserName = cpf,
                 Name = _nome[0],
                 Surname = _nome[1],
                 EmailAddress = email,

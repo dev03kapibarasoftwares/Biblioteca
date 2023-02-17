@@ -6,17 +6,23 @@ using System.ComponentModel.DataAnnotations;
 namespace Teste.Livros.Dto
 {
     [AutoMap(typeof(Livro))]
-    public class LivroDto : FullAuditedEntityDto
+    public class LivroDto : FullAuditedEntityDto<long>
     {
         [Required]
         [MaxLength(100)]
-        public string Nome { get; set; }
+        public string Nome_Livro { get; set; }
 
         [Required]
         [MaxLength(100)]
         public string Autor { get; set; }
 
-        [DefaultValue(false)]
-        public bool Emprestado { get; set; }
+        [DefaultValue(true)]
+        public bool Disponivel { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string Nome_Genero { get; set; }
+        [MaxLength(30)]
+        public string SubGenero { get; set; }
     }
 }
