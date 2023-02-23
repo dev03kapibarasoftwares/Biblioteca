@@ -24,5 +24,8 @@ namespace Teste.Livros.Dto
         public string Nome_Genero { get; set; }
         [MaxLength(30)]
         public string SubGenero { get; set; }
+
+        [DefaultValue(false)]
+        public bool IsDeleted { get; set; }
     }
 }

@@ -34,8 +34,13 @@ namespace Teste.Livros
         public async Task CreateLivro(LivroDto input)
         {
             var livro = ObjectMapper.Map<Livro>(input);
-            var genero = await _generoRepository.InsertAndGetIdAsync(ObjectMapper.Map<Genero>(input));
+            var genero = new Genero()
+            {
+                Nome_Genero = input.Nome_Genero,
+                SubGenero = input.SubGenero
+            };
             livro.Disponivel = false;
+            livro.IsDeleted= false;
 
             await _livroRepository.InsertAsync(livro);
             await CurrentUnitOfWork.SaveChangesAsync();   
