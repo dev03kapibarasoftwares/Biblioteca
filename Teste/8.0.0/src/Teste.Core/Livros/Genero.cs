@@ -10,9 +10,12 @@ namespace Teste.Livros
     {
         [Required]
         [MaxLength(30)]
-        public string Nome { get; set; }
-        [Required]
+        public string Nome_Genero { get; set; }
         [MaxLength(30)]
         public string SubGenero { get; set; }
+
+        [ForeignKey("LivroId")]
+        public Livro Livro { get; set; }
+        public long Livroid { get; set; }
     }
 }
