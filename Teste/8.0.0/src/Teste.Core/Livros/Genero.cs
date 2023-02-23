@@ -16,6 +16,6 @@ namespace Teste.Livros
 
         [ForeignKey("LivroId")]
         public Livro Livro { get; set; }
-        public long Livroid { get; set; }
+        public long LivroId { get; set; }
     }
 }

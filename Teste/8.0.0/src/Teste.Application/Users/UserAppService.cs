@@ -25,7 +25,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Teste.Users
 {
-    [AbpAuthorize(PermissionNames.Pages_Users)]
+    [AbpAuthorize]
     public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUserResultRequestDto, CreateUserDto, UserDto>, IUserAppService
     {
         private readonly UserManager _userManager;
@@ -103,7 +103,7 @@ namespace Teste.Users
             await _userManager.DeleteAsync(user);
         }
 
-        [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
+        [AbpAuthorize]
         public async Task Activate(EntityDto<long> user)
         {
             await Repository.UpdateAsync(user.Id, async (entity) =>
@@ -112,7 +112,7 @@ namespace Teste.Users
             });
         }
 
-        [AbpAuthorize(PermissionNames.Pages_Users_Activation)]
+        [AbpAuthorize]
         public async Task DeActivate(EntityDto<long> user)
         {
             await Repository.UpdateAsync(user.Id, async (entity) =>
