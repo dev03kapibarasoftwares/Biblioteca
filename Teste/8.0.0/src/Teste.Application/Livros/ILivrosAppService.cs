@@ -2,7 +2,7 @@
 
 namespace Teste.Livros
 {
-    internal interface ILivrosAppService : IApplicationService
+    public interface ILivrosAppService : IApplicationService
     {
     }
 }
