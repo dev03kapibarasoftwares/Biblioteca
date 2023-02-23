@@ -31,7 +31,7 @@ namespace Teste.Livros
                 throw new UserFriendlyException("Genero não informado!");         
         }
 
-        public async Task CreateAsync(LivroDto input)
+        public async Task CreateLivro(LivroDto input)
         {
             var livro = ObjectMapper.Map<Livro>(input);
             var genero = await _generoRepository.InsertAndGetIdAsync(ObjectMapper.Map<Genero>(input));
@@ -77,7 +77,7 @@ namespace Teste.Livros
             livro.Autor = input.Autor;
             livro.Disponivel = input.Disponivel;
 
-            var genero = await _generoRepository.FirstOrDefaultAsync(x => x.Id == livro.Id);
+            var genero = await _generoRepository.FirstOrDefaultAsync(x => x.LivroId == livro.Id);
             genero.Nome_Genero = input.Nome_Genero;
             genero.SubGenero = input.SubGenero;
             
@@ -93,6 +93,9 @@ namespace Teste.Livros
                 throw new UserFriendlyException("Livro não cadastrado no banco de dados!");
 
             var livro = await _livroRepository.FirstOrDefaultAsync(x => x.Id == input.Id);
+
+            livro.IsDeleted= true;
+            _livroRepository.UpdateAsync(livro);
         }
     }
 }

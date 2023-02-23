@@ -16,10 +16,12 @@ namespace Teste.PedidosDeRetiradas.Dto
         [Required]
         public DateTime DataRetirada { get; set; }
 
-        public List<PedidoDeRetiradaItens> Itens{ get; set; }
-
         [Required]
         public DateTime DataDevolucao { get; set; }
+
+        [Required]
+        public int Status{ get; set; }
+        public List<PedidoDeRetiradaItens> Itens { get; set; }
 
     }
 }

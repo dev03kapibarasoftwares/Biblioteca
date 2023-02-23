@@ -12,6 +12,7 @@ using Teste.PedidoDeRetirada;
 using Teste.PedidosDeRetiradas.Dto;
 using System.Linq;
 using Abp.Collections.Extensions;
+using System;
 
 namespace Teste.PedidosDeRetiradas
 {
@@ -54,6 +55,11 @@ namespace Teste.PedidosDeRetiradas
                     livro.Livro.Disponivel = false;
             else throw new UserFriendlyException("Não possuem Livros na requisição!");
 
+            if (pedidoInput.DataRetirada > DateTime.Now)
+                Pedido.StatusPedido = StatusPedido.Reservado;
+            else if (pedidoInput.DataRetirada == DateTime.Now)
+                Pedido.StatusPedido = StatusPedido.Retirado;
+
             await _pedidoRepository.InsertAsync(Pedido);
         }
 
@@ -94,7 +100,6 @@ namespace Teste.PedidosDeRetiradas
 
             if (!pedido.Itens.IsNullOrEmpty())
             {
-
                 foreach(PedidoDeRetiradaItens item in pedido.Itens)
                     await _pedidoDeRetiradaItensRepository.UpdateAsync(item);
             }                
@@ -105,7 +110,10 @@ namespace Teste.PedidosDeRetiradas
         public async Task DeletePedido(PedidoDeRetiradaDto input)
         {
             var delete = await GetPedidoById(input.Id);
-            await _pedidoRepository.DeleteAsync(delete);
+            if (delete == null)
+                throw new UserFriendlyException("O pedido informado não existe no banco de dados!");
+            delete.IsDeleted = true;
+            await _pedidoRepository.UpdateAsync(delete);
         }
     }
 }

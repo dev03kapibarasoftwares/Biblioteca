@@ -8,7 +8,7 @@ using Teste.Authorization.Users;
 
 namespace Teste.PedidosDeRetiradas
 {
-    [Table("Bibliotecas_PedidosDeRetiradasItens")]
+    [Table("Biblioteca_PedidosDeRetiradas")]
     public class PedidoDeRetirada : FullAuditedEntity<long>, ISoftDelete
     {
         [Required]
@@ -18,5 +18,8 @@ namespace Teste.PedidosDeRetiradas
         [ForeignKey("UserId")]
         public User User { get; set; }
         public long UserId { get; set; }
+
+        [Required]
+        public StatusPedido StatusPedido { get; set; }
     }
 }
