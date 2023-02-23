@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Teste.EntityFrameworkCore;
 
@@ -11,9 +12,11 @@ using Teste.EntityFrameworkCore;
 namespace Teste.Migrations
 {
     [DbContext(typeof(TesteDbContext))]
-    partial class TesteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230223023842_Change tables")]
+    partial class Changetables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1777,7 +1780,7 @@ namespace Teste.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Biblioteca_PedidosDeRetiradas");
+                    b.ToTable("Bibliotecas_PedidosDeRetiradasItens");
                 });
 
             modelBuilder.Entity("Teste.PedidosDeRetiradas.PedidoDeRetiradaItens", b =>
